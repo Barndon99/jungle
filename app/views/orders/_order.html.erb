@@ -1,0 +1,18 @@
+<% @final_order.each do |product| %>
+  <tr>
+    <td>
+      <%= image_tag product.product.image.tiny %>
+    </td>
+    <td>
+      <h4><%= product.product.name %></h4>
+      <br>
+      <p><%= product.product.description %></p>
+    </td>
+    <td>
+      <%=product.product.quantity%> in stock
+    </td>
+    <td>
+      <%= humanized_money_with_symbol product.product.price * product.quantity %>
+    </td>
+  </tr>
+<% end %>
