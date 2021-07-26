@@ -1,5 +1,7 @@
 class Admin::ProductsController < ApplicationController
-  http_basic_authenticate_with name: "dhh", password: "secret", except: :index
+  require 'dotenv/load'
+  
+  http_basic_authenticate_with name: ENV['HTTP_BASIC_USER'], password: ENV['HTTP_BASIC_PASS'], except: :index
 
   def index
     @products = Product.order(id: :desc).all
