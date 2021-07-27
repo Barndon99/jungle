@@ -32,8 +32,42 @@ RSpec.describe User, type: :model do
 
   end
 
-  #describe '.authenticate_with_credentials' do
-  #  # examples for this class method here
-  #end
+  describe '.authenticate_with_credentials' do
+    # examples for this class method here
+    it 'should log in a user with valid credentials' do
+      @new_user = User.new(fname: 'barndon', lname: 'rowland', email: 'row@gmail.com', password: 'hellothere', password_confirmation: 'hellothere')
+      @new_user.save
+      expect(User.authenticate_with_credentials("row@gmail.com", "hellothere")).to eq(@new_user)
+    end
+
+    it 'should log in a user with spaces around the email' do
+      @new_user = User.new(fname: 'barndon', lname: 'rowland', email: 'row@gmail.com', password: 'hellothere', password_confirmation: 'hellothere')
+      @new_user.save
+      expect(User.authenticate_with_credentials("  row@gmail.com  ", "hellothere")).to eq(@new_user)
+    end
+
+    it 'should return nil if the email is wrong' do
+      @new_user = User.new(fname: 'barndon', lname: 'rowland', email: 'row@gmail.com', password: 'hellothere', password_confirmation: 'hellothere')
+      @new_user.save
+      expect(User.authenticate_with_credentials("paddle@gmail.com", "hellothere")).to eq(nil)
+    end
+
+    it 'should return nil if the password is wrong' do
+      @new_user = User.new(fname: 'barndon', lname: 'rowland', email: 'row@gmail.com', password: 'hellothere', password_confirmation: 'hellothere')
+      @new_user.save
+      expect(User.authenticate_with_credentials("row@gmail.com", "byethere")).to eq(nil)
+    end
+
+    it 'should not let a new user signup with an existing email' do
+      @new_user = User.new(fname: 'barndon', lname: 'rowland', email: 'row@gmail.com', password: 'hellothere', password_confirmation: 'hellothere')
+      @new_user.save
+      @new_user1 = User.new(fname: 'barndon', lname: 'rowland', email: 'row@gmail.com', password: 'hellothere', password_confirmation: 'hellothere')
+      @new_user1.save
+      expect(User.authenticate_with_credentials("row@gmail.com", "hellothere")).to eq(@new_user)
+      expect(@new_user1).not_to be_valid
+    end
+
+
+  end
 
 end
